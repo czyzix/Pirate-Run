@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.cdnfonts.com/css/pf-tempesta-five" rel="stylesheet">
+    <script src="script.js" type="module"></script>
+    <title>T-rex run</title>
+</head>
+
+<body>
+    <!-- <div id="turn">
+        Please rotate your device!
+    </div> -->
+    <h1 id="game-title">T-rex Run</h1>
+    <div id="scoreboard" class="hidden">
+        <h2 id="scoreboard-text">scoreboard</h2>
+        <table id="scoreboard-table">
+            <tr>
+                <td>rank</td>
+                <td>name</td>
+                <td>points</td>
+            </tr>
+            <tr id="first">
+                <td>1st</td>
+                <td id="first-nick">.....</td>
+                <td id="first-points">.....</td>
+            </tr>
+            <tr id="second">
+                <td>2nd</td>
+                <td id="second-nick">.....</td>
+                <td id="second-points">.....</td>
+            </tr>
+            <tr id="third">
+                <td>3rd</td>
+                <td id="third-nick">.....</td>
+                <td id="third-points">.....</td>
+            </tr>
+        </table>
+        <form id="form">
+            <h3 id="nicknameEnterText" class="hidden">ENTER YOUR NICK</h3>
+            <input type="text" id="nickname" class="hidden" maxlength="8">
+            <button type="submit" id="nickname-btn" class="game-btn hidden">SAVE</button>
+        </form>
+        <button id="back-start-screen-btn" class="game-btn hidden">START SCREEN</button>
+    </div>
+    <div class="world" data-world>
+        <div id="score">score: 0</div>
+        <div id="bonus" class="hidden">+100</div>
+        <div id="highscore">highscore: 0</div>
+        <div id="start-screen">
+            <h2 id="start-screen-text" class="blink">PRESS BUTTON TO START</h2>
+            <div id="start-screen-btns">
+                <button id="start-btn" class="game-btn">START</button>
+                <button id="scoreboard-btn" class="game-btn">SCOREBOARD</button>
+            </div>
+        </div>
+        <img src="imgs/ground.png" class="ground" data-ground>
+        <img src="imgs/ground.png" class="ground" data-ground>
+        <img src="imgs/dino-stationary.png" class="dino" data-dino>
+    </div>
+
+</body>
+</html>
