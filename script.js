@@ -234,3 +234,9 @@ function thirdPlayerNickInput(ev) {
     startScreen.classList.remove('hidden');
     document.getElementById('form').removeEventListener('submit', thirdPlayerNickInput);
 };
+
+var max = 8
+
+nicknameInput.addEventListener('keyup', function (event) {
+    event.target.value = event.target.value.substring(0, max)
+})
