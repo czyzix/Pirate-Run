@@ -253,6 +253,19 @@ h3 {
     }
 }
 
+@media only screen and (max-height: 450px) {
+    
+    #scoreboard {
+        scale: 0.75;
+        width: 133.9%;
+        height: 133.9%;
+    }
+    
+    #back-start-screen-btn {
+        top: 80%;
+    }
+}
+
 @media only screen and (max-width: 350px) {
     .world {
         width: 390px;
