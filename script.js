@@ -209,8 +209,8 @@ function firstPlayerNickInput(ev) {
 
 function secondPlayerNickInput(ev) {
     ev.preventDefault();
-    let dupa = nicknameInput.value
-    secondScoreNick.textContent = dupa;
+    let playerNick = nicknameInput.value
+    secondScoreNick.textContent = playerNick;
     nicknameInput.value = "";
     nicknameInput.classList.add("hidden");
     nicknameBtn.classList.add("hidden");
@@ -223,8 +223,8 @@ function secondPlayerNickInput(ev) {
 
 function thirdPlayerNickInput(ev) {
     ev.preventDefault();
-    let dupsko = nicknameInput.value
-    thirdScoreNick.textContent = dupsko;
+    let playerNick = nicknameInput.value
+    thirdScoreNick.textContent = playerNick;
     nicknameInput.value = "";
     nicknameInput.classList.add("hidden");
     nicknameBtn.classList.add("hidden");
