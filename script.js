@@ -6,7 +6,7 @@ import { setupCoin, updateCoin, getCoinRects, removeCoin} from "./coin.js";
 const SPEED_SCALE_INCREASE = 0.00001;
 
 const scoreElem = document.getElementById("score");
-const highscoreElem = document.getElementById("highscore");
+const highScoreElem = document.getElementById("highscore");
 const bonusElem = document.getElementById("bonus");
 const worldElem = document.querySelector("[data-world]");
 
@@ -20,21 +20,59 @@ const backStartScreenBtn = document.getElementById("back-start-screen-btn");
 
 const nicknameBtn = document.getElementById("nickname-btn");
 const nicknameInput = document.getElementById("nickname");
-const firstScoreTable = document.getElementById("first-points");
-const secondScoreTable = document.getElementById("second-points");
-const thirdScoreTable = document.getElementById("third-points");
-const firstScoreNick = document.getElementById("first-nick");
-const secondScoreNick = document.getElementById("second-nick");
-const thirdScoreNick = document.getElementById("third-nick");
+
+const tableScore1 = document.getElementById("first-points");
+const tableScore2 = document.getElementById("second-points");
+const tableScore3 = document.getElementById("third-points");
+const tableNick1 = document.getElementById("first-nick");
+const tableNick2 = document.getElementById("second-nick");
+const tableNick3 = document.getElementById("third-nick");
+
+let topPlayers = [
+    {
+        id: 1,
+        nick: ".....",
+        score: "000"
+    },
+    {
+        id: 2,
+        nick: ".....",
+        score: "000"
+    },
+    {
+        id: 3,
+        nick: ".....",
+        score: "000"
+    }
+]
+
+tableScore1.innerText = topPlayers[0].score
+tableScore2.innerText = topPlayers[1].score
+tableScore3.innerText = topPlayers[2].score
+tableNick1.innerText = topPlayers[0].nick
+tableNick2.innerText = topPlayers[1].nick
+tableNick3.innerText = topPlayers[2].nick
 
 let lastTime; 
 let speedScale;
 let score;
-let highscore = 0;
-let secondscore = 0;
-let thirdscore = 0;
-let firstNick;
-let secondNick;
+let highScore = 0;
+let secondScore = 0;
+let thirdScore = 0;
+let firstNick = topPlayers[0].nick;
+let secondNick = topPlayers[1].nick;
+let thirdNick = topPlayers[2].nick;
+
+let topPlayersFromLocalStorage
+
+function setUpTopPlayers() {
+    topPlayersFromLocalStorage = JSON.parse(localStorage.getItem("topPlayers"));
+};
+
+setUpTopPlayers();
+
+console.log(topPlayersFromLocalStorage)
+console.log(topPlayers)
 
 startBtn.addEventListener('click', handleStart, {once:true});
 scoreboardBtn.addEventListener('click', showScoreboard);
@@ -72,7 +110,7 @@ function update(time) {
     
     checkBonusCoin();
 
-    if (checkLose()) return handleLose(), updateHighscore(delta);
+    if (checkLose()) return handleLose(), updateScores(delta);
 
     lastTime = time;
     window.requestAnimationFrame(update);
@@ -134,36 +172,44 @@ function handleLose() {
     setDinoLose();
     setTimeout(() => {
         startBtn.addEventListener('click', handleStart, {once:true});
-        if (score < thirdscore) {
+        if (score < thirdScore) {
             startScreen.classList.remove("hidden");
         };
     }, 100); // to prevent accidentaly clicking space right after lose and starting the game accidentaly
     
 };
 
-function updateHighscore() {
+
+
+function updateScores() {
     playerNickPosition();
-    if (score > highscore) {
-        thirdscore = secondscore;
-        secondscore = highscore;
-        highscore = score;
-        highscoreElem.textContent = ("highscore: ") + Math.floor(highscore);
-        firstScoreTable.textContent = Math.floor(highscore);
-        secondScoreTable.textContent = Math.floor(secondscore);
-        thirdScoreTable.textContent = Math.floor(thirdscore);
-    } else if (score > secondscore && score < highscore) {
-        thirdscore = secondscore;
-        secondscore = score;
-        secondScoreTable.textContent = Math.floor(score);
-        thirdScoreTable.textContent = Math.floor(thirdscore);
-    } else if (score > thirdscore && score < secondscore) {
-        thirdscore = score;
-        thirdScoreTable.textContent = Math.floor(score);
-    };
+    if (score > highScore) {
+        thirdScore = secondScore;
+        secondScore = highScore;
+        highScore = score;
+        highScoreElem.textContent = ("highScore: ") + Math.floor(highScore);
+        topPlayers[0].score = highScore;
+        tableScore1.innerText = Math.floor(topPlayers[0].score);
+        topPlayers[1].score = secondScore;
+        tableScore2.innerText = Math.floor(topPlayers[1].score);
+        topPlayers[2].score = thirdScore;
+        tableScore3.innerText = Math.floor(topPlayers[2].score);
+    } else if (score > secondScore && score < highScore) {
+        thirdScore = secondScore;
+        secondScore = score;
+        topPlayers[1].score = secondScore;
+        tableScore2.innerText = Math.floor(topPlayers[1].score);
+        topPlayers[2].score = thirdScore;
+        tableScore3.innerText = Math.floor(topPlayers[2].score);
+    } else if (score > thirdScore && score < secondScore) {
+        thirdScore = score;
+        topPlayers[2].score = thirdScore;
+        tableScore3.innerText = Math.floor(topPlayers[2].score);
+    }
 };
 
 function playerNickPosition() {
-    if (score > thirdscore) {
+    if (score > thirdScore) {
         setTimeout(function() {
             nicknameInput.classList.remove("hidden");
             nicknameBtn.classList.remove("hidden");
@@ -171,72 +217,86 @@ function playerNickPosition() {
             enterNicknameText.classList.remove("hidden");
         }, 450);
         
-        if (score > highscore) {
-            secondNick = secondScoreNick.textContent;
-            thirdScoreNick.textContent = secondNick;
-            firstNick = firstScoreNick.textContent;
-            secondScoreNick.textContent = firstNick;
-            firstScoreNick.textContent = "???";
-            firstScoreNick.classList.add("blink");
+        if (score > highScore) {
+            secondNick = topPlayers[1].nick;
+            topPlayers[2].nick = secondNick
+            tableNick3.innerText = secondNick;
+            firstNick = topPlayers[0].nick;
+            topPlayers[1].nick = firstNick;
+            tableNick2.innerText = firstNick;
+            tableNick1.innerText = "???";
+            tableNick1.classList.add("blink");
             document.getElementById('form').addEventListener('submit', firstPlayerNickInput);
-        } else if (score > secondscore && score < highscore) {
-            secondNick = secondScoreNick.textContent;
-            thirdScoreNick.textContent = secondNick;
-            secondScoreNick.textContent = "???";
-            secondScoreNick.classList.add("blink");
+        } else if (score > secondScore && score < highScore) {
+            secondNick = topPlayers[1].nick;
+            topPlayers[2].nick = secondNick
+            tableNick3.innerText = secondNick;
+            tableNick2.textContent = "???";
+            tableNick2.classList.add("blink");
             document.getElementById('form').addEventListener('submit', secondPlayerNickInput);
-        } else if (score > thirdscore && score < secondscore) {
-            thirdScoreNick.textContent = "???";
-            thirdScoreNick.classList.add("blink");
+        } else if (score > thirdScore && score < secondScore) {
+            tableNick3.textContent = "???";
+            tableNick3.classList.add("blink");
             document.getElementById('form').addEventListener('submit', thirdPlayerNickInput);
-        };
+        }
     };
 };
 
 function firstPlayerNickInput(ev) {
     ev.preventDefault();
-    let playerNick = nicknameInput.value
-    firstScoreNick.textContent = playerNick;
+    let playerNick = nicknameInput.value;
+    topPlayers[0].nick = playerNick;
+    tableNick1.innerText = topPlayers[0].nick
+
     nicknameInput.value = "";
     nicknameInput.classList.add("hidden");
     nicknameBtn.classList.add("hidden");
     enterNicknameText.classList.add("hidden");
-    firstScoreNick.classList.remove("blink");
+    tableNick1.classList.remove("blink");
     scoreboard.classList.add("hidden");
     startScreen.classList.remove('hidden');
-    document.getElementById('form').removeEventListener('submit', firstPlayerNickInput);
-};
+    document.getElementById('form').removeEventListener('submit', firstPlayerNickInput, setTopPlayersToLocalStorage());
+}
 
 function secondPlayerNickInput(ev) {
     ev.preventDefault();
-    let playerNick = nicknameInput.value
-    secondScoreNick.textContent = playerNick;
+    let playerNick = nicknameInput.value;
+    topPlayers[1].nick = playerNick;
+    tableNick2.innerText = topPlayers[1].nick;
+
     nicknameInput.value = "";
     nicknameInput.classList.add("hidden");
     nicknameBtn.classList.add("hidden");
     enterNicknameText.classList.add("hidden");
-    secondScoreNick.classList.remove("blink");
+    tableNick2.classList.remove("blink");
     scoreboard.classList.add("hidden");
     startScreen.classList.remove('hidden');
-    document.getElementById('form').removeEventListener('submit', secondPlayerNickInput);
-};
+    document.getElementById('form').removeEventListener('submit', secondPlayerNickInput, setTopPlayersToLocalStorage());
+}
 
 function thirdPlayerNickInput(ev) {
     ev.preventDefault();
-    let playerNick = nicknameInput.value
-    thirdScoreNick.textContent = playerNick;
+    let playerNick = nicknameInput.value;
+    topPlayers[2].nick = playerNick;
+    tableNick3.innerText = topPlayers[2].nick;
+
     nicknameInput.value = "";
     nicknameInput.classList.add("hidden");
     nicknameBtn.classList.add("hidden");
     enterNicknameText.classList.add("hidden");
-    thirdScoreNick.classList.remove("blink");
+    tableNick3.classList.remove("blink");
     scoreboard.classList.add("hidden");
     startScreen.classList.remove('hidden');
-    document.getElementById('form').removeEventListener('submit', thirdPlayerNickInput);
+    document.getElementById('form').removeEventListener('submit', thirdPlayerNickInput, setTopPlayersToLocalStorage());
 };
 
-var max = 8
+let max = 8
 
 nicknameInput.addEventListener('keyup', function (event) {
     event.target.value = event.target.value.substring(0, max)
 })
+
+function setTopPlayersToLocalStorage() {
+    localStorage.setItem("topPlayers", JSON.stringify(topPlayers))
+}
+
