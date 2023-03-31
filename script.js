@@ -1,26 +1,20 @@
 import { setupGround, updateGround } from "./ground.js";
 import { setupDino, updateDino, getDinoRect, setDinoLose } from "./dino.js";
 import { setupCactus, updateCactus, getCactusRects } from "./cactus.js";
-import { setupCoin, updateCoin, getCoinRects, removeCoin} from "./coin.js";
+import { setupCoin, updateCoin, getCoinRects, removeCoin } from "./coin.js";
 
 const SPEED_SCALE_INCREASE = 0.00001;
-
 const scoreElem = document.getElementById("score");
 const highScoreElem = document.getElementById("highscore");
 const bonusElem = document.getElementById("bonus");
-const worldElem = document.querySelector("[data-world]");
-
 const startScreen = document.getElementById("start-screen");
 const startBtn = document.getElementById("start-btn");
-
 const scoreboard = document.getElementById("scoreboard");
 const scoreboardBtn = document.getElementById("scoreboard-btn");
 const enterNicknameText = document.getElementById("nicknameEnterText");
 const backStartScreenBtn = document.getElementById("back-start-screen-btn");
-
 const nicknameBtn = document.getElementById("nickname-btn");
 const nicknameInput = document.getElementById("nickname");
-
 const tableScore1 = document.getElementById("first-points");
 const tableScore2 = document.getElementById("second-points");
 const tableScore3 = document.getElementById("third-points");
@@ -45,15 +39,7 @@ let topPlayers = [
         score: "000"
     }
 ]
-
-tableScore1.innerText = topPlayers[0].score
-tableScore2.innerText = topPlayers[1].score
-tableScore3.innerText = topPlayers[2].score
-tableNick1.innerText = topPlayers[0].nick
-tableNick2.innerText = topPlayers[1].nick
-tableNick3.innerText = topPlayers[2].nick
-
-let lastTime; 
+let lastTime;
 let speedScale;
 let score;
 let highScore = 0;
@@ -61,20 +47,35 @@ let secondScore = 0;
 let thirdScore = 0;
 let firstNick = topPlayers[0].nick;
 let secondNick = topPlayers[1].nick;
-let thirdNick = topPlayers[2].nick;
+let topPlayersLS;
 
-let topPlayersFromLocalStorage
-
-function setUpTopPlayers() {
-    topPlayersFromLocalStorage = JSON.parse(localStorage.getItem("topPlayers"));
+function getTopPlayersFromLocalStorage() {
+    topPlayersLS = JSON.parse(localStorage.getItem("topPlayers"));
+    if (topPlayersLS != null) {updateScoreBoardAndScores()};
 };
 
-setUpTopPlayers();
+function updateScoreBoardAndScores() {
+    highScore = Math.floor(topPlayersLS[0].score);
+    highScoreElem.textContent = ("highScore: ") + Math.floor(highScore);
+    secondScore = Math.floor(topPlayersLS[1].score)
+    thirdScore = Math.floor(topPlayersLS[2].score)
+    topPlayers[0].score = Math.floor(topPlayersLS[0].score)
+    topPlayers[1].score = Math.floor(topPlayersLS[1].score)
+    topPlayers[2].score = Math.floor(topPlayersLS[2].score)
+    tableScore1.innerText = topPlayers[0].score
+    tableScore2.innerText = topPlayers[1].score
+    tableScore3.innerText = topPlayers[2].score
+    topPlayers[0].nick = topPlayersLS[0].nick
+    topPlayers[1].nick = topPlayersLS[1].nick
+    topPlayers[2].nick = topPlayersLS[2].nick
+    tableNick1.innerText = topPlayers[0].nick
+    tableNick2.innerText = topPlayers[1].nick
+    tableNick3.innerText = topPlayers[2].nick
+}
 
-console.log(topPlayersFromLocalStorage)
-console.log(topPlayers)
+getTopPlayersFromLocalStorage();
 
-startBtn.addEventListener('click', handleStart, {once:true});
+startBtn.addEventListener('click', handleStart, { once: true });
 scoreboardBtn.addEventListener('click', showScoreboard);
 backStartScreenBtn.addEventListener('click', backToStartScreen);
 
@@ -107,7 +108,7 @@ function update(time) {
     updateCoin(delta, speedScale);
     updateSpeedScale(delta);
     updateScore(delta);
-    
+
     checkBonusCoin();
 
     if (checkLose()) return handleLose(), updateScores(delta);
@@ -128,7 +129,7 @@ function handleStart() {
     if (window.matchMedia('(max-device-width: 415px)').matches) {
         speedScale = 1.5;
     };
-    
+
     startScreen.classList.add("hidden");
     window.requestAnimationFrame(update);
 };
@@ -153,7 +154,7 @@ function checkBonusCoin() {
         removeCoin();
         score = score + 100;
         bonusElem.classList.remove("hidden");
-        setTimeout(function() {
+        setTimeout(function () {
             bonusElem.classList.add("hidden");
         }, 700);
     };
@@ -161,9 +162,9 @@ function checkBonusCoin() {
 
 function isCollision(rect1, rect2) {
     return (
-        rect1.left < rect2.right && 
-        rect1.top < rect2.bottom && 
-        rect1.right > rect2.left && 
+        rect1.left < rect2.right &&
+        rect1.top < rect2.bottom &&
+        rect1.right > rect2.left &&
         rect1.bottom > rect2.top
     );
 };
@@ -171,15 +172,13 @@ function isCollision(rect1, rect2) {
 function handleLose() {
     setDinoLose();
     setTimeout(() => {
-        startBtn.addEventListener('click', handleStart, {once:true});
+        startBtn.addEventListener('click', handleStart, { once: true });
         if (score < thirdScore) {
             startScreen.classList.remove("hidden");
         };
     }, 100); // to prevent accidentaly clicking space right after lose and starting the game accidentaly
-    
+
 };
-
-
 
 function updateScores() {
     playerNickPosition();
@@ -210,13 +209,13 @@ function updateScores() {
 
 function playerNickPosition() {
     if (score > thirdScore) {
-        setTimeout(function() {
+        setTimeout(function () {
             nicknameInput.classList.remove("hidden");
             nicknameBtn.classList.remove("hidden");
             scoreboard.classList.remove("hidden");
             enterNicknameText.classList.remove("hidden");
         }, 450);
-        
+
         if (score > highScore) {
             secondNick = topPlayers[1].nick;
             topPlayers[2].nick = secondNick
