@@ -12,6 +12,7 @@ let currentFrameTime;
 let yVelocity;
 
 export function setupDino() {
+    dinoElem.classList.remove('bigger');
     isJumping = false;
     dinoFrame = 0;
     currentFrameTime = 0;
@@ -34,6 +35,7 @@ export function getDinoRect() {
 
 export function setDinoLose() {
     dinoElem.src = `imgs/dino-lose.png`;
+    dinoElem.classList.add('bigger');
 };
 
 function handleRun(delta, speedScale) {
