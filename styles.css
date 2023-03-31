@@ -77,7 +77,7 @@ body {
     bottom: calc(var(--bottom) * 1%);
 }
 
-.biger {
+.bigger {
     height: 21%;
 }
 
