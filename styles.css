@@ -34,7 +34,7 @@ body {
     position: relative;
     width: 1100px;
     height: 500px;
-    background-color: rgb(232, 250, 255);
+    background: linear-gradient(rgb(118, 255, 221), rgb(0, 174, 255))
 }
 
 #highscore, #score, #bonus {
@@ -75,6 +75,10 @@ body {
     left: 1%;
     height: 17%;
     bottom: calc(var(--bottom) * 1%);
+}
+
+.biger {
+    height: 21%;
 }
 
 .cactus {
