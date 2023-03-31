@@ -1,8 +1,8 @@
 import { getCustomProperty, incrementCustomProperty, setCustomProperty, randomNumberBetween } from "./updateCustomProperty.js";
 
 const SPEED = 0.05; // must be the same as the ground SPEED
-let COIN_INTERVAL_MIN = 10000;
-let COIN_INTERVAL_MAX = 20000;
+let COIN_INTERVAL_MIN = 2000;
+let COIN_INTERVAL_MAX = 9000;
 const worldElem = document.querySelector("[data-world]");
 
 let nextCoinTime;
